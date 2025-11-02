@@ -101,24 +101,23 @@ export const GridBody: React.FC<GridBodyProps> = ({
       );
     }
     // rtl for today
-    // if (
-    //   rtl &&
-    //   i + 1 !== dates.length &&
-    //   date.getTime() >= now.getTime() &&
-    //   dates[i + 1].getTime() < now.getTime()
-    // ) {
+    if (
+      rtl &&
+      i + 1 !== dates.length &&
+      date.getTime() >= now.getTime() &&
+      dates[i + 1].getTime() < now.getTime()
+    ) {
+      // const next =
+      //   i + 1 < dates.length
+      //     ? dates[i + 1]
+      //     : addToDate(
+      //         date,
+      //         date.getTime() - dates[i - 1].getTime(),
+      //         "millisecond"
+      //       );
 
-    const next =
-      i + 1 < dates.length
-        ? dates[i + 1]
-        : addToDate(
-            date,
-            date.getTime() - dates[i - 1].getTime(),
-            "millisecond"
-          );
-
-    // Is "now" inside [date, next)?
-    if (now.getTime() >= date.getTime() && now.getTime() < next.getTime()) {
+      // // Is "now" inside [date, next)?
+      // if (now.getTime() >= date.getTime() && now.getTime() < next.getTime()) {
       today = (
         <rect
           x={tickX + columnWidth}
@@ -133,22 +132,23 @@ export const GridBody: React.FC<GridBodyProps> = ({
 
       // x within this column (RTL mirrors inside the column)
 
-      const span = next.getTime() - date.getTime();
+      // const span = next.getTime() - date.getTime();
 
-      const offset = span > 0 ? (now.getTime() - date.getTime()) / span : 0;
+      // const offset = span > 0 ? (now.getTime() - date.getTime()) / span : 0;
 
-      const xInside = rtl
-        ? columnWidth - offset * columnWidth
-        : offset * columnWidth;
+      // const xInside = rtl
+      //   ? columnWidth - offset * columnWidth
+      //   : offset * columnWidth;
 
-      const xAbs = tickX + xInside;
+      // const xAbs = tickX + xInside;
 
       todayLine = (
         <line
           key="todayLine"
-          x1={xAbs}
+          // x1={xAbs}
+          x1={tickX}
           y1={0}
-          x2={xAbs}
+          x2={tickX}
           y2={y}
           // stroke={todayColor || "red"}
           stroke={"red"}

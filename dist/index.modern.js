@@ -659,9 +659,7 @@ var GridBody = function GridBody(_ref) {
       });
     }
 
-    var next = i + 1 < dates.length ? dates[i + 1] : addToDate(date, date.getTime() - dates[i - 1].getTime(), "millisecond");
-
-    if (now.getTime() >= date.getTime() && now.getTime() < next.getTime()) {
+    if (rtl && i + 1 !== dates.length && date.getTime() >= now.getTime() && dates[i + 1].getTime() < now.getTime()) {
       today = React.createElement("rect", {
         x: tickX + columnWidth,
         y: 0,
@@ -669,15 +667,11 @@ var GridBody = function GridBody(_ref) {
         height: y,
         fill: todayColor
       });
-      var span = next.getTime() - date.getTime();
-      var offset = span > 0 ? (now.getTime() - date.getTime()) / span : 0;
-      var xInside = rtl ? columnWidth - offset * columnWidth : offset * columnWidth;
-      var xAbs = tickX + xInside;
       todayLine = React.createElement("line", {
         key: "todayLine",
-        x1: xAbs,
+        x1: tickX,
         y1: 0,
-        x2: xAbs,
+        x2: tickX,
         y2: y,
         stroke: "red",
         strokeWidth: 1,
