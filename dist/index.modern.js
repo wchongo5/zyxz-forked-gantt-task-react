@@ -636,6 +636,7 @@ var GridBody = function GridBody(_ref) {
   var tickX = 0;
   var ticks = [];
   var today = React.createElement("rect", null);
+  var todayLine = React.createElement("rect", null);
 
   for (var i = 0; i < dates.length; i++) {
     var date = dates[i];
@@ -658,13 +659,29 @@ var GridBody = function GridBody(_ref) {
       });
     }
 
-    if (rtl && i + 1 !== dates.length && date.getTime() >= now.getTime() && dates[i + 1].getTime() < now.getTime()) {
+    var next = i + 1 < dates.length ? dates[i + 1] : addToDate(date, date.getTime() - dates[i - 1].getTime(), "millisecond");
+
+    if (now.getTime() >= date.getTime() && now.getTime() < next.getTime()) {
       today = React.createElement("rect", {
         x: tickX + columnWidth,
         y: 0,
         width: columnWidth,
         height: y,
         fill: todayColor
+      });
+      var span = next.getTime() - date.getTime();
+      var offset = span > 0 ? (now.getTime() - date.getTime()) / span : 0;
+      var xInside = rtl ? columnWidth - offset * columnWidth : offset * columnWidth;
+      var xAbs = tickX + xInside;
+      todayLine = React.createElement("line", {
+        key: "todayLine",
+        x1: xAbs,
+        y1: 0,
+        x2: xAbs,
+        y2: y,
+        stroke: "red",
+        strokeWidth: 1,
+        shapeRendering: "crispEdges"
       });
     }
 
@@ -681,7 +698,9 @@ var GridBody = function GridBody(_ref) {
     className: "ticks"
   }, ticks), React.createElement("g", {
     className: "today"
-  }, today));
+  }, today), React.createElement("g", {
+    className: "today"
+  }, todayLine));
 };
 
 var Grid = function Grid(props) {

@@ -61,9 +61,6 @@ export const GridBody: React.FC<GridBodyProps> = ({
   let tickX = 0;
   const ticks: ReactChild[] = [];
   let today: ReactChild = <rect />;
-  // NEW: we’ll draw a single thin line instead of a shaded column
-  let todayLine: ReactChild = <rect />;
-
   for (let i = 0; i < dates.length; i++) {
     const date = dates[i];
     ticks.push(
@@ -101,24 +98,12 @@ export const GridBody: React.FC<GridBodyProps> = ({
       );
     }
     // rtl for today
-    // if (
-    //   rtl &&
-    //   i + 1 !== dates.length &&
-    //   date.getTime() >= now.getTime() &&
-    //   dates[i + 1].getTime() < now.getTime()
-    // ) {
-
-    const next =
-      i + 1 < dates.length
-        ? dates[i + 1]
-        : addToDate(
-            date,
-            date.getTime() - dates[i - 1].getTime(),
-            "millisecond"
-          );
-
-    // Is "now" inside [date, next)?
-    if (now.getTime() >= date.getTime() && now.getTime() < next.getTime()) {
+    if (
+      rtl &&
+      i + 1 !== dates.length &&
+      date.getTime() >= now.getTime() &&
+      dates[i + 1].getTime() < now.getTime()
+    ) {
       today = (
         <rect
           x={tickX + columnWidth}
@@ -126,34 +111,6 @@ export const GridBody: React.FC<GridBodyProps> = ({
           width={columnWidth}
           height={y}
           fill={todayColor}
-        />
-      );
-
-      // LINE
-
-      // x within this column (RTL mirrors inside the column)
-
-      const span = next.getTime() - date.getTime();
-
-      const offset = span > 0 ? (now.getTime() - date.getTime()) / span : 0;
-
-      const xInside = rtl
-        ? columnWidth - offset * columnWidth
-        : offset * columnWidth;
-
-      const xAbs = tickX + xInside;
-
-      todayLine = (
-        <line
-          key="todayLine"
-          x1={xAbs}
-          y1={0}
-          x2={xAbs}
-          y2={y}
-          // stroke={todayColor || "red"}
-          stroke={"red"}
-          strokeWidth={1}
-          shapeRendering="crispEdges"
         />
       );
     }
@@ -165,7 +122,6 @@ export const GridBody: React.FC<GridBodyProps> = ({
       <g className="rowLines">{rowLines}</g>
       <g className="ticks">{ticks}</g>
       <g className="today">{today}</g>
-      <g className="today">{todayLine}</g>
     </g>
   );
 };
